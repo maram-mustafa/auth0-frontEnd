@@ -1,6 +1,6 @@
 import React from "react";
 import Header from "./Header";
-import IsLoadingAndError from "./IsLoadingAndError";
+// import IsLoadingAndError from "./IsLoadingAndError";
 import Footer from "./Footer";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
@@ -18,28 +18,25 @@ class App extends React.Component {
     return (
       <>
         <Router>
-          <IsLoadingAndError>
-            <Header isAuth={isAuthenticated} logoutFunc={logout} />
-            <Switch>
-              <Route exact path="/">
-                {/* TODO: if the user is logged in, render the `MyFavoriteBooks` component, if they are not, render the `Login` component */}
+          {/* <IsLoadingAndError> */}
+          <Header isAuth={isAuthenticated} logoutFunc={logout} />
+          <Switch>
+            <Route exact path="/">
+              {/* TODO: if the user is logged in, render the `MyFavoriteBooks` component, if they are not, render the `Login` component */}
 
-                {isAuthenticated ? (
-                  <MyFavoriteBooks />
-                ) : (
-                  <Login
-                    isAuth={isAuthenticated}
-                    loginFunc={loginWithRedirect}
-                  />
-                )}
-              </Route>
-              {/* TODO: add a route with a path of '/profile' that renders a `Profile` component */}
-              <Route path="/Profile">
-                <Profile user={user} />
-              </Route>
-            </Switch>
-            <Footer />
-          </IsLoadingAndError>
+              {isAuthenticated ? (
+                <MyFavoriteBooks />
+              ) : (
+                <Login isAuth={isAuthenticated} loginFunc={loginWithRedirect} />
+              )}
+            </Route>
+            {/* TODO: add a route with a path of '/profile' that renders a `Profile` component */}
+            <Route exact path="/Profile">
+              <Profile user={user} />
+            </Route>
+          </Switch>
+          <Footer />
+          {/* </IsLoadingAndError> */}
         </Router>
       </>
     );
