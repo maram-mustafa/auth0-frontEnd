@@ -4,7 +4,7 @@ function LogoutButton(props) {
   // const { isAuthenticated, logout } = useAuth0();
 
   return (
-    props.isAuthenticated && (
+    props.isAuth && (
       <button
         onClick={() => {
          props.logoutFunc({ returnTo: window.location.origin });
