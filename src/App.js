@@ -5,7 +5,7 @@ import Footer from "./Footer";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import Profile from "./Components/Profile";
-import MyFavoriteBooks from "./MyFavoriteBooks";
+import BestBooks from "./BestBooks";
 import Login from "./Login";
 import { withAuth0 } from "@auth0/auth0-react";
 
@@ -14,7 +14,7 @@ class App extends React.Component {
     const { user, isAuthenticated, loginWithRedirect, logout } =
       this.props.auth0;
 
-    console.log("app", this.props);
+    // console.log("app", this.props);
     return (
       <>
         <Router>
@@ -22,10 +22,10 @@ class App extends React.Component {
           <Header isAuth={isAuthenticated} logoutFunc={logout} />
           <Switch>
             <Route exact path="/">
-              {/* TODO: if the user is logged in, render the `MyFavoriteBooks` component, if they are not, render the `Login` component */}
+              {/* TODO: if the user is logged in, render the `BestBooks` component, if they are not, render the `Login` component */}
 
               {isAuthenticated ? (
-                <MyFavoriteBooks />
+                <BestBooks userEmail={user.email}/>
               ) : (
                 <Login isAuth={isAuthenticated} loginFunc={loginWithRedirect} />
               )}
