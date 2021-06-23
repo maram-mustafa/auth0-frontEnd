@@ -6,12 +6,19 @@ import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import axios from "axios";
 import BookFormModal from "./Components/BookFormModal";
+import UpdateModal from "./Components/UpdateModal";
 
 class MyFavoriteBooks extends React.Component {
   state = {
     data: [],
     showModal: false,
     err: "",
+    updateShow: false,
+    updateInfo: {},
+    name: "",
+    desc: "",
+    status: "",
+    id: "",
   };
 
   componentDidMount() {
@@ -74,7 +81,48 @@ class MyFavoriteBooks extends React.Component {
   };
 
   closeModal = () => {
-    this.setState({ showModal: false });
+    this.setState({ showModal: false, updateShow: false });
+  };
+
+  showUpdateModal = (i) => {
+    let bookObj = this.state.data[i];
+    console.log(bookObj);
+
+    this.setState({
+      updateShow: true,
+      name: bookObj.name,
+      desc: bookObj.desc,
+      status: bookObj.status,
+      id: bookObj._id,
+    });
+  };
+
+  change = (e) => {
+    if (e.target.name === "bookName") {
+      this.setState({ name: e.target.value });
+    } else if (e.target.name === "bookDesc") {
+      this.setState({ desc: e.target.value });
+    } else if (e.target.name === "select") {
+      this.setState({ status: e.target.value });
+    }
+  };
+
+  updateData = (e) => {
+    e.preventDefault();
+    let id = this.state.id;
+    let serverURL = process.env.REACT_APP_SERVER;
+    let url = `${serverURL}/updatebooks/${id}`;
+
+    let updatedData = {
+      email: this.props.userEmail,
+      name: e.target.bookName.value,
+      desc: e.target.bookDesc.value,
+      status: e.target.select.value,
+    };
+    axios.put(url, updatedData).then((data) => {
+      this.setState({ data: data.data})
+      console.log(data.data);
+    });
   };
 
   render() {
@@ -97,16 +145,34 @@ class MyFavoriteBooks extends React.Component {
                   >
                     Delete
                   </Button>
+                  <Button
+                    variant="primary"
+                    name={i}
+                    onClick={() => this.showUpdateModal(i)}
+                  >
+                    UpDate
+                  </Button>
                 </Card.Body>
                 <Card.Footer className="text-muted">{book.status}</Card.Footer>
               </Card>
             );
           })}
         </div>
+
         <BookFormModal
           show={this.state.showModal}
           closeFunc={this.closeModal}
           postFunc={this.postData}
+        />
+
+        <UpdateModal
+          show={this.state.updateShow}
+          closeFunc={this.closeModal}
+          name={this.state.name}
+          desc={this.state.desc}
+          status={this.state.status}
+          changeFunc={this.change}
+          updateFunc={this.updateData}
         />
       </>
     );
